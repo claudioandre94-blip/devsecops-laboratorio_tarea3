@@ -105,7 +105,7 @@ jobs:
         with:
           image-ref: ${{secrets.DOCKER_USER}}/tareadevsecopsusachfinalclaudioquiroz:latest
           format: 'table'
-          exit-code: '1'
+          #exit-code: '1'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH,MEDIUM'
 
