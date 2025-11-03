@@ -23,7 +23,7 @@ jobs:
             echo "Proyecto ${{github.event.repository.name}} creado exitosamente en SonarCloud "
           fi
           echo "Se establece rama main por defecto"
-          curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{github.event.repository.name}}'
+          curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=${{ github.head_ref || github.ref_name }}' -d 'project=${{github.event.repository.name}}'
           set -e
       - name: Configure Node Project
         uses: actions/setup-node@v4
@@ -39,7 +39,7 @@ jobs:
 
       - name : Obtaing results from SonarCloud
         run :  |
-          issueValidate=$(curl -s -X GET -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{github.event.repository.name}}&types=VULNERABILITY&severities=MAJOR,CRITICAL,BLOCKER' | jq '.issues | length')
+          issueValidate=$(curl -s -X GET -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/issues/search?branch=${{ github.head_ref || github.ref_name }}&componentKeys=${{github.event.repository.name}}&types=VULNERABILITY&severities=MAJOR,CRITICAL,BLOCKER' | jq '.issues | length')
           echo "Cantidad de Issues MAJOR,CRITICAL,BLOCKER : $issueValidate"
           if [ "$issueValidate" -gt 0 ]; then
             echo "Se encontraron issues bloqueantes. Se quiebra el pipeline."
