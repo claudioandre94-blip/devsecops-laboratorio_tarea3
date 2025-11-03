@@ -40,7 +40,7 @@ jobs:
           echo "Cantidad de Issues MAJOR,CRITICAL,BLOCKER : $issueValidate"
           if [ "$issueValidate" -gt 0 ]; then
             echo "Se encontraron issues bloqueantes. Se quiebra el pipeline."
-            #exit 1
+            exit 1
           else
             echo "No se encontraron issues bloqueantes. Pipeline Continua."
           fi                            
@@ -68,6 +68,7 @@ jobs:
           format: 'HTML'
           out: 'reports'
           args: > 
+            --failOnCVSS 4
             --enableRetired
 
       - name: Upload Dependency-Check Report
@@ -81,7 +82,7 @@ jobs:
         if: failure()
         run: |
           echo "Se han encontrado vulnerabilidades con CVSS >= 4"
-          #exit 1
+          exit 1
 
   DockerBuild:
     needs: SCA
@@ -105,7 +106,7 @@ jobs:
         with:
           image-ref: ${{secrets.DOCKER_USER}}/tareadevsecopsusachfinalclaudioquiroz:latest
           format: 'table'
-          #exit-code: '1'
+          exit-code: '1'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH,MEDIUM'
 
