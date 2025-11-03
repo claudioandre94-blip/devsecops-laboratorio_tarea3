@@ -18,12 +18,9 @@ jobs:
           curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'organization=claudioandre94-blip' -d 'project=${{github.event.repository.name}}' -d 'visibility=public'
           if [ $? -ne 0 ]; then
             echo "Proyecto ya existe en SonarCloud"
-            echo "::set-output name=proyectoExiste::1"
           else
             echo "Proyecto ${{github.event.repository.name}} creado exitosamente en SonarCloud "
           fi
-          echo "Se establece rama main por defecto"
-          curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=${{ github.head_ref || github.ref_name }}' -d 'project=${{github.event.repository.name}}'
           set -e
       - name: Configure Node Project
         uses: actions/setup-node@v4
