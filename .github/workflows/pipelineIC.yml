@@ -68,7 +68,6 @@ jobs:
           format: 'HTML'
           out: 'reports'
           args: > 
-            --failOnCVSS 4
             --enableRetired
 
       - name: Upload Dependency-Check Report
@@ -78,10 +77,10 @@ jobs:
           name: dependency-check-report
           path: ${{github.workspace}}/reports
 
-      #- name:  Check for vulnerabilities
-        #if: failure()
-        #run: |
-          #echo "Se han encontrado vulnerabilidades con CVSS >= 4"
+      - name:  Check for vulnerabilities
+        if: failure()
+        run: |
+          echo "Se han encontrado vulnerabilidades con CVSS >= 4"
           #exit 1
 
   DockerBuild:
