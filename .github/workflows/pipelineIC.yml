@@ -21,9 +21,9 @@ jobs:
             echo "::set-output name=proyectoExiste::1"
           else
             echo "Proyecto ${{github.event.repository.name}} creado exitosamente en SonarCloud "
-            echo "Se establece rama main por defecto"
-            curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{github.event.repository.name}}'
           fi
+          echo "Se establece rama main por defecto"
+          curl -f -X POST -u '${{secrets.SONAR_TOKEN}}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{github.event.repository.name}}'
           set -e
       - name: Configure Node Project
         uses: actions/setup-node@v4
